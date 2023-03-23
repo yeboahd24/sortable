@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="flex flex-col items-center mt-8">
+    <h1 class="text-3xl font-bold">Sortable Items</h1>
+    <ul id="sortable" class="mt-8">
+      {% for item in items %}
+        <li data-id="{{ item.id }}" class="bg-white rounded-lg shadow-lg p-4 mb-4 cursor-move">
+          {{ item.name }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.13.0/Sortable.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var el = document.getElementById('sortable');
+      var sortable = Sortable.create(el, {
+        onUpdate: function(event) {
+          var items = $(el).find('li');
+          items.each(function(index) {
+            var item_id = $(this).data('id');
+            $.ajax({
+              url: '/update_position/',
+              type: 'POST',
+              data: {'id': item_id, 'position': index},
+              success: function(data) {
+                console.log(data);
+              }
+            });
+          });
+        }
+      });
+    });
+  </script>
+{% endblock %}
