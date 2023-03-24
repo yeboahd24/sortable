@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import index, update_position
+from core.views import index, update_position, send_message, receive_message
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index, name="index"),
     path("update_position/", update_position, name="update_position"),
+    path("send-message/", send_message, name="send_message"),
+    path("receive-message/", receive_message, name="receive_message"),
 ]
